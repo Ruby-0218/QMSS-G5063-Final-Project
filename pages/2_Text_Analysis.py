@@ -14,8 +14,6 @@ with st.sidebar:
     ticker = st.selectbox("Ticker", ALL_TICKERS, index=0)
 
 filtered = posts[posts["ticker"].astype(str).str.upper() == str(ticker).upper()].copy()
-if source != "All":
-    filtered = filtered[filtered["source"].astype(str).str.title() == source]
 
 if filtered.empty:
     st.warning(f"No text data available for {ticker}.")
