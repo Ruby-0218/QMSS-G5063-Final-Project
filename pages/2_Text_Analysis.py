@@ -12,15 +12,13 @@ sentiment = load_sentiment()
 
 with st.sidebar:
     ticker = st.selectbox("Ticker", ALL_TICKERS, index=0)
-    source = st.selectbox("Source", ["All", "Retail", "News"])
 
 filtered = posts[posts["ticker"].astype(str).str.upper() == str(ticker).upper()].copy()
 if source != "All":
     filtered = filtered[filtered["source"].astype(str).str.title() == source]
 
 if filtered.empty:
-    st.info(f"💡 偷偷看一下這份資料裡到底有哪些 Source: {posts['source'].unique().tolist()}")
-    st.warning(f"No text data available for {ticker} under the '{source}' filter.")
+    st.warning(f"No text data available for {ticker}.")
     st.stop()
 
 filtered["sentiment_label"] = filtered["sentiment_score"].apply(sentiment_label)
