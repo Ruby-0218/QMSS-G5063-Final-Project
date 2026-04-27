@@ -8,16 +8,14 @@ st.set_page_config(
 )
 
 st.title("Pricing Market Sentiment")
-st.subheader("How public opinion and professional news sentiment relate to stock volatility")
+st.subheader("How Retail Sentiment (WallStreetBets) Relates to Stock Volatility")
 
 st.markdown("""
-This interactive dashboard investigates whether high-growth technology stocks are more sensitive to public sentiment than traditional value stocks. 
-The project compares retail-oriented market sentiment, professional financial news sentiment, stock returns, volatility, and topic co-occurrence patterns across selected tickers.
+This interactive dashboard investigates whether high-growth technology stocks are more sensitive to retail sentiment than traditional value stocks. The project analyzes retail-oriented market sentiment, stock returns, volatility, and topic co-occurrence patterns across selected tickers based on historical **Reddit (WallStreetBets)** discussions.
 """)
 
 st.info("""
-Data source strategy: Reddit can be replaced with StockTwits or Alpha Vantage News Sentiment. 
-This preserves the original research question while avoiding Reddit API access problems.
+Data source strategy: Due to Reddit API limitations, this project utilizes a comprehensive historical Kaggle dataset of Reddit's r/wallstreetbets. This ensures stable data access while perfectly maintaining the core focus on retail investor behavior.
 """)
 
 col1, col2, col3 = st.columns(3)
@@ -59,11 +57,11 @@ public market sentiment may matter more for stocks that are already more specula
 
 with st.expander("Methodology: Data Substitution & Research Impact"):
     st.write("""
-    Due to Reddit API limitations, this project utilizes a high-quality historical financial sentiment dataset from **Kaggle**. This ensures a larger, more stable sample size while maintaining the original research integrity.
+    Due to current Reddit API limitations, this project utilizes a high-quality historical dataset of **Reddit's r/wallstreetbets** sourced from **Kaggle**. This ensures a larger, more stable sample size while maintaining the original research intent of measuring public market sentiment.
     
     **Why we chose this specific dataset:**
-    * **High Financial Relevance:** It focuses specifically on stock market discussions and financial news, effectively filtering out irrelevant social media noise.
-    * **Reliable Sentiment Labels:** The text is pre-processed and categorized into clear sentiment polarities, providing a solid foundation for quantitative analysis.
+    * **Pure Retail Investor Focus:** It captures authentic, unfiltered discussions from the WallStreetBets community, allowing us to perfectly isolate the impact of retail momentum and "meme-stock" dynamics.
+    * **Robust Sentiment Analysis:** The historical text provides a solid foundation for NLP sentiment scoring, converting unstructured social media buzz into clear, quantifiable polarities.
     * **Targeted Ticker Coverage:** It contains dense historical data for both our experimental group (High-growth Tech: NVDA, TSLA, etc.) and control group (Value: JPM, XOM), making the comparison accurate and meaningful.
     """)
 
