@@ -57,11 +57,14 @@ Each chart includes interaction, comparison, or filtering. The dashboard avoids 
 public market sentiment may matter more for stocks that are already more speculative, narrative-driven, and heavily discussed.
 """)
 
-with st.expander("Recommended revised proposal wording"):
+with st.expander("Methodology: Data Substitution & Research Impact"):
     st.write("""
-    Because Reddit API access is currently limited, this project replaces Reddit retail-investor data with StockTwits messages and Alpha Vantage news sentiment. 
-    This change improves domain relevance because StockTwits is organized around tickers and investor discussion. 
-    The core research question remains the same: whether public sentiment and professional financial news sentiment help explain volatility differences between high-growth technology stocks and traditional value stocks.
+    Due to Reddit API limitations, this project utilizes a high-quality historical financial sentiment dataset from **Kaggle**. This ensures a larger, more stable sample size while maintaining the original research integrity.
+    
+    **Why we chose this specific dataset:**
+    * **High Financial Relevance:** It focuses specifically on stock market discussions and financial news, effectively filtering out irrelevant social media noise.
+    * **Reliable Sentiment Labels:** The text is pre-processed and categorized into clear sentiment polarities, providing a solid foundation for quantitative analysis.
+    * **Targeted Ticker Coverage:** It contains dense historical data for both our experimental group (High-growth Tech: NVDA, TSLA, etc.) and control group (Value: JPM, XOM), making the comparison accurate and meaningful.
     """)
 
 st.caption("Use the sidebar pages to explore the dashboard, text analysis, network map, and event shock explorer.")
