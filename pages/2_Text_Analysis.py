@@ -19,6 +19,7 @@ if source != "All":
     filtered = filtered[filtered["source"].astype(str).str.title() == source]
 
 if filtered.empty:
+    st.info(f"💡 偷偷看一下這份資料裡到底有哪些 Source: {posts['source'].unique().tolist()}")
     st.warning(f"No text data available for {ticker} under the '{source}' filter.")
     st.stop()
 
