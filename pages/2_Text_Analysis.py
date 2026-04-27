@@ -14,9 +14,13 @@ with st.sidebar:
     ticker = st.selectbox("Ticker", ALL_TICKERS, index=0)
     source = st.selectbox("Source", ["All", "Retail", "News"])
 
-filtered = posts[posts["ticker"] == ticker].copy()
+filtered = posts[posts["ticker"].astype(str).str.upper() == str(ticker).upper()].copy()
 if source != "All":
-    filtered = filtered[filtered["source"] == source]
+    filtered = filtered[filtered["source"].astype(str).str.title() == source]
+
+if filtered.empty:
+    st.warning(f"No text data available for {ticker} under the '{source}' filter.")
+    st.stop()
 
 filtered["sentiment_label"] = filtered["sentiment_score"].apply(sentiment_label)
 
