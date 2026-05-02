@@ -41,7 +41,7 @@ st.markdown("""
 To ensure computational efficiency and dashboard responsiveness, we engineered a dedicated **Offline Processing Pipeline** (`data_converter.py`).
 """)
 
-with st.expander("🔍 View Technical Workflow Architecture"):
+with st.expander("View Technical Workflow Architecture"):
     st.code("""
     # Quantitative Pipeline:
     # 1. Text Normalization: Regex-based cleaning and redundant word deduplication.
