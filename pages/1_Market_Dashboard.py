@@ -115,7 +115,6 @@ st.markdown("""
 * **Alternative Data Sources:** While our current model captures retail sentiment via text analysis, future iterations could incorporate prediction market data (e.g., **Kalshi, Polymarket**). Contrasting retail social hype with real-money betting odds could provide a more robust signal for impending price shocks.
 """)
 
-st.markdown("---")
 st.subheader("Deep Dive: Does 'Hype Volume' Drive Volatility?")
 st.markdown("""
 While sentiment direction (positive/negative) is noisy, the sheer **volume of discussion** might be a stronger indicator of market turbulence. 
