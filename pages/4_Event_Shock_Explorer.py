@@ -10,7 +10,6 @@ st.markdown("""
 
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
-    header {visibility: hidden;}
 
     .block-container {
         padding-top: 3.5rem; 
