@@ -12,6 +12,25 @@ STOCK_GROUPS = {
 
 ALL_TICKERS = STOCK_GROUPS["High-Growth Tech"] + STOCK_GROUPS["Traditional Value"]
 
+# Fixed color per company
+TICKER_COLORS = {
+    "NVDA": "#76b900",  # Nvidia green
+    "TSLA": "#e23d41",  # Tesla red
+    "AAPL": "#555555",  # Apple black/gray
+    "MSFT": "#00a4ef",  # Microsoft blue
+    "AMZN": "#ff9900",  # Amazon orange
+    "JPM": "#175e96",   # JPMorgan dark blue
+    "XOM": "#ed1b24"    # ExxonMobil red
+}
+
+# Fixed color per category
+SENTIMENT_COLORS = {
+    "Bullish": "#2ecc71", 
+    "Neutral": "#95a5a6",  
+    "Bearish": "#e74c3c"  
+}
+
+
 @st.cache_data(show_spinner=False)
 def load_prices():
     path = DATA_DIR / "prices_sample.csv"
