@@ -3,9 +3,23 @@ import networkx as nx
 from pyvis.network import Network
 import streamlit.components.v1 as components
 from pathlib import Path
+import pandas as pd
 from utils import load_network_edges, TICKER_COLORS 
 
 st.set_page_config(page_title="Network Map", layout="wide")
+
+st.markdown("""
+<style>
+#MainMenu {visibility: hidden;}
+footer {visibility: hidden;}
+header {visibility: hidden;}
+.block-container {
+    padding-top: 2rem;
+    padding-bottom: 0rem;
+}
+</style>
+""", unsafe_allow_html=True)
+
 st.title("Network Map: The Web of Market Narratives")
 
 edges = load_network_edges()
@@ -32,13 +46,19 @@ if filtered_edges.empty:
     st.warning("No connections found at this strength level. Try lowering the threshold.")
     st.stop()
 
-# NetworkX 
+# NetworkX
 G = nx.Graph()
 
 for _, row in filtered_edges.iterrows():
     G.add_node(row["source_node"], node_type=row["source_type"])
     G.add_node(row["target_node"], node_type=row["target_type"])
     G.add_edge(row["source_node"], row["target_node"], weight=int(row["weight"]))
+
+centrality = nx.degree_centrality(G)
+centrality_data = []
+for node, score in centrality.items():
+    if G.nodes[node].get("node_type") == "keyword":
+        centrality_data.append({"Keyword": node, "Centrality Score": score})
 
 # PyVis 
 net = Network(height="650px", width="100%", bgcolor="#ffffff", font_color="#222222", notebook=False)
@@ -64,7 +84,6 @@ for node, attrs in G.nodes(data=True):
         title=f"{node_type.capitalize()}: {node}"
     )
 
-# Edges
 for u, v, attrs in G.edges(data=True):
     weight = attrs.get("weight", 1)
     net.add_edge(
@@ -114,14 +133,32 @@ html_path = Path("network_temp.html")
 net.save_graph(str(html_path))
 components.html(html_path.read_text(encoding="utf-8"), height=700, scrolling=True)
 
-st.markdown("---")
-st.subheader("Data Table: Connection Weights")
+st.subheader("Network Metrics: Identifying Narrative Hubs")
+st.markdown("Which topics serve as the 'glue' for the entire market? Using **Degree Centrality**, we identify the keywords that act as central hubs, connecting diverse stocks.")
 
-with st.expander("Click to view raw edge data"):
-    st.dataframe(filtered_edges.sort_values("weight", ascending=False), use_container_width=True, hide_index=True)
+if centrality_data:
+    cent_df = pd.DataFrame(centrality_data).sort_values(by="Centrality Score", ascending=False).head(5)
+    
+    import plotly.express as px
+    fig_cent = px.bar(
+        cent_df, 
+        x="Centrality Score", 
+        y="Keyword",
+        orientation='h',
+        title="Top 5 Central Narrative Hubs",
+        color="Centrality Score",
+        color_continuous_scale="Blues"
+    )
+    fig_cent.update_layout(showlegend=False, height=350, yaxis={'categoryorder':'total ascending'})
+    st.plotly_chart(fig_cent, use_container_width=True)
+else:
+    st.info("Increase the connection strength to see network metrics.")
+
+st.subheader("Data Table: Connection Weights")
+st.dataframe(filtered_edges.sort_values("weight", ascending=False), use_container_width=True, hide_index=True)
 
 st.markdown("""
-**Analytical Insight:** If technology tickers (e.g., NVDA, TSLA) cluster heavily around narrative keywords such as 'AI', 'chips', or 'growth', 
-while value stocks (e.g., XOM) cluster around 'oil', 'rates', or 'dividends', this network structure provides 
+**Analytical Insight:** If technology tickers cluster heavily around narrative keywords such as 'AI' or 'growth', 
+while value stocks cluster around 'rates' or 'dividends', this network structure provides 
 quantitative evidence of distinct **sentiment silos** within the broader market.
 """)
