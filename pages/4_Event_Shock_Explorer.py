@@ -7,13 +7,21 @@ st.set_page_config(page_title="Event Shock Explorer", layout="wide")
 
 st.markdown("""
 <style>
-#MainMenu {visibility: hidden;}
-footer {visibility: hidden;}
-header {visibility: hidden;}
-.block-container {
-    padding-top: 2rem;
-    padding-bottom: 0rem;
-}
+
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+
+    .block-container {
+        padding-top: 3.5rem; 
+        padding-bottom: 6rem;
+        padding-left: 5rem;
+        padding-right: 5rem;
+    }
+    
+    .stPlotlyChart {
+        margin-bottom: 2rem;
+    }
 </style>
 """, unsafe_allow_html=True)
 
