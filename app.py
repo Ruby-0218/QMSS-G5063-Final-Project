@@ -3,7 +3,6 @@ from utils import load_prices, load_sentiment, build_merged_data, STOCK_GROUPS
 
 st.set_page_config(
     page_title="Pricing Market Sentiment",
-    page_icon="📈",
     layout="wide"
 )
 
@@ -29,7 +28,7 @@ with col2:
 with col3:
     st.metric("Specialized visuals", "2 included", "Text + Network")
 
-st.divider()
+
 
 st.header("Research Question")
 st.markdown("""
