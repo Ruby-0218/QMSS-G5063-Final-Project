@@ -1,5 +1,5 @@
 import streamlit as st
-import pandas as pd
+import pandas as pd 
 import plotly.graph_objects as go
 import plotly.express as px
 from utils import load_prices, load_sentiment, build_merged_data, STOCK_GROUPS, ALL_TICKERS, rolling_corr, TICKER_COLORS
@@ -46,8 +46,23 @@ else:
 col1, col2, col3, col4 = st.columns(4)
 col1.metric("Selected Ticker", ticker)
 col2.metric("Average Sentiment", f"{stock_df[sent_col].mean():.3f}")
-col3.metric("Average Daily Return", f"{stock_df['return'].mean() * 100:.2f}%")
-col4.metric("Average 7-Day Volatility", f"{stock_df['volatility_7d'].mean() * 100:.2f}%")
+
+avg_return = stock_df['return'].mean() * 100
+avg_volatility = stock_df['volatility_7d'].mean() * 100
+
+col3.metric(
+    label="Average Daily Return", 
+    value=f"{avg_return:.2f}%", 
+    delta="Positive Trend" if avg_return > 0 else "Negative Trend",
+    delta_color="normal" 
+)
+
+col4.metric(
+    label="Average 7-Day Volatility", 
+    value=f"{avg_volatility:.2f}%", 
+    delta="High Volatility" if avg_volatility > 3 else "Normal",
+    delta_color="inverse" 
+)
 
 current_color = TICKER_COLORS.get(ticker, "#1f77b4")
 
