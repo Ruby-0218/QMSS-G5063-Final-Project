@@ -2,16 +2,10 @@ import streamlit as st
 import plotly.express as px
 from wordcloud import WordCloud, STOPWORDS
 import matplotlib.pyplot as plt
-from utils import load_text_posts, load_sentiment, ALL_TICKERS, sentiment_label
+from utils import load_text_posts, load_sentiment, ALL_TICKERS, sentiment_label, SENTIMENT_COLORS
 
 st.set_page_config(page_title="Text Analysis", layout="wide")
 st.title("Text Analysis: Decoding the Market Narrative")
-
-SENTIMENT_COLORS = {
-    "Positive": "#2ecc71", 
-    "Neutral": "#95a5a6",  
-    "Negative": "#e74c3c"  
-}
 
 posts = load_text_posts()
 sentiment = load_sentiment()
