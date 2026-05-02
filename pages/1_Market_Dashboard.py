@@ -114,3 +114,29 @@ st.markdown("""
 * **Design Choice:** This dashboard prioritizes relative comparison over pure numerical display. The key visual task is evaluating whether the "High-Growth/Meme" sector exhibits a stronger sentiment-to-volatility transmission mechanism than the traditional value control group.
 * **Alternative Data Sources:** While our current model captures retail sentiment via text analysis, future iterations could incorporate prediction market data (e.g., **Kalshi, Polymarket**). Contrasting retail social hype with real-money betting odds could provide a more robust signal for impending price shocks.
 """)
+
+st.markdown("---")
+st.subheader("Deep Dive: Does 'Hype Volume' Drive Volatility?")
+st.markdown("""
+While sentiment direction (positive/negative) is noisy, the sheer **volume of discussion** might be a stronger indicator of market turbulence. 
+The scatter plot below tests whether days with high message volume correlate with higher 7-day price volatility.
+""")
+
+fig_scatter = px.scatter(
+    df[df["volatility_7d"].notna() & df["volume_7d"].notna()], 
+    x="volume_7d", 
+    y="volatility_7d",
+    color="ticker",
+    color_discrete_map=TICKER_COLORS,
+    hover_data=["date", "close"],
+    opacity=0.6,
+    title="Discussion Volume vs. Price Volatility"
+)
+
+fig_scatter.update_layout(
+    xaxis_title="7-Day Average Message Volume",
+    yaxis_title="7-Day Price Volatility",
+    yaxis_tickformat=".1%",
+    height=500
+)
+st.plotly_chart(fig_scatter, use_container_width=True)
