@@ -125,7 +125,6 @@ else:
     st.warning("No text available for this filter.")
 
 # N-gram 
-st.markdown("---")
 st.subheader("Beyond Single Words: Top Trending Phrases")
 st.markdown("While individual words are useful, retail investor narratives are driven by catchphrases. Here we extract the most common 2-to-3 word combinations.")
 
