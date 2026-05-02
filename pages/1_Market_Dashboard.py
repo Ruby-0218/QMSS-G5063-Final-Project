@@ -1,10 +1,17 @@
 import streamlit as st
 import plotly.graph_objects as go
 import plotly.express as px
-from utils import load_prices, load_sentiment, build_merged_data, STOCK_GROUPS, ALL_TICKERS, rolling_corr
+from utils import load_prices, load_sentiment, build_merged_data, STOCK_GROUPS, ALL_TICKERS, rolling_corr, TICKER_COLORS
 
 st.set_page_config(page_title="Market Dashboard", layout="wide")
-st.title("Market and Sentiment Dashboard")
+
+# Storyline
+st.title("Market Dashboard: Does Retail Hype Move Markets?")
+st.markdown("""
+**Executive Summary:** In the era of meme stocks, financial markets are no longer driven solely by fundamentals. 
+This dashboard explores the relationship between asset prices and the digital "voice" of the crowd. 
+Are social media sentiment spikes a lagging indicator of price action, or do they predict future volatility?
+""")
 
 prices = load_prices()
 sentiment = load_sentiment()
@@ -35,73 +42,22 @@ elif sentiment_source == "News sentiment":
 else:
     sent_col = "sentiment_score"
 
-st.markdown("""
-This page compares market movement with sentiment. The main chart uses two axes because stock price and sentiment are measured on different scales.
-""")
-
 col1, col2, col3, col4 = st.columns(4)
-col1.metric("Selected ticker", ticker)
-col2.metric("Average sentiment", f"{stock_df[sent_col].mean():.3f}")
-col3.metric("Average daily return", f"{stock_df['return'].mean() * 100:.2f}%")
-col4.metric("Average 7-day volatility", f"{stock_df['volatility_7d'].mean() * 100:.2f}%")
+col1.metric("Selected Ticker", ticker)
+col2.metric("Average Sentiment", f"{stock_df[sent_col].mean():.3f}")
+col3.metric("Average Daily Return", f"{stock_df['return'].mean() * 100:.2f}%")
+col4.metric("Average 7-Day Volatility", f"{stock_df['volatility_7d'].mean() * 100:.2f}%")
+
+current_color = TICKER_COLORS.get(ticker, "#1f77b4")
 
 fig = go.Figure()
 fig.add_trace(go.Scatter(
     x=stock_df["date"], y=stock_df["close"],
-    mode="lines", name="Close price"
+    mode="lines", name="Close Price",
+    line=dict(color=current_color, width=3) 
 ))
 fig.add_trace(go.Scatter(
     x=stock_df["date"], y=stock_df[sent_col],
     mode="lines", name=sentiment_source,
-    yaxis="y2"
-))
-fig.update_layout(
-    title=f"{ticker}: Price and Sentiment Over Time",
-    xaxis_title="Date",
-    yaxis=dict(title="Close price"),
-    yaxis2=dict(title="Sentiment score", overlaying="y", side="right"),
-    hovermode="x unified",
-    height=520
-)
-st.plotly_chart(fig, use_container_width=True)
-
-st.caption("Interpretation: sentiment peaks are not expected to perfectly match prices every day. The stronger question is whether sentiment spikes align with periods of elevated return or volatility.")
-
-st.subheader("Rolling Correlation")
-corr_df = rolling_corr(df, ticker, window=14)
-fig_corr = px.line(
-    corr_df,
-    x="date",
-    y="rolling_corr",
-    title=f"{ticker}: 14-Day Rolling Correlation Between Sentiment and Return"
-)
-fig_corr.add_hline(y=0, line_dash="dot")
-st.plotly_chart(fig_corr, use_container_width=True)
-
-st.markdown("""
-**Data Insight:** Unlike daily stock prices, Reddit sentiment is highly episodic. Retail investors tend to stay quiet during normal days (sentiment = 0) but show explosive engagement around key events. Therefore, rolling correlation may temporarily drop to zero during quiet periods, which accurately reflects the "hype-driven" nature of meme stocks.
-""")
-
-st.subheader("Sector Comparison")
-
-group_col = "group_x" if "group_x" in df.columns else "group"
-
-group_summary = df.groupby(group_col).agg(
-    avg_sentiment=("sentiment_score", "mean"),
-    avg_volatility=("volatility_7d", "mean"),
-    avg_message_volume=("message_volume", "mean")
-).reset_index()
-
-fig_bar = px.bar(
-    group_summary,
-    x=group_col,
-    y=["avg_sentiment", "avg_volatility"],
-    barmode="group",
-    title="Average Sentiment and Volatility by Stock Group"
-)
-
-st.plotly_chart(fig_bar, use_container_width=True)
-
-st.markdown("""
-**Design choice:** this page prioritizes comparison rather than showing raw market data only. The key visual task is to let users compare whether the high-growth group has stronger sentiment-volatility movement than the control group.
-""")
+    yaxis="y2",
+    line=dict(color="rgba(150,
