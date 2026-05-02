@@ -1,4 +1,5 @@
 import streamlit as st
+import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
 from utils import load_prices, load_sentiment, build_merged_data, STOCK_GROUPS, ALL_TICKERS, rolling_corr, TICKER_COLORS
@@ -72,7 +73,7 @@ fig.update_layout(
 )
 st.plotly_chart(fig, use_container_width=True)
 
-st.caption("🔍 **Interpretation:** Sentiment peaks are not expected to perfectly match prices every day. The stronger question is whether sentiment spikes align with periods of elevated return or volatility.")
+st.caption("**Interpretation:** Sentiment peaks are not expected to perfectly match prices every day. The stronger question is whether sentiment spikes align with periods of elevated return or volatility.")
 
 st.subheader("Rolling Correlation: Is the Relationship Stable?")
 corr_df = rolling_corr(df, ticker, window=14)
@@ -139,3 +140,42 @@ fig_scatter.update_layout(
     height=500
 )
 st.plotly_chart(fig_scatter, use_container_width=True)
+
+st.subheader("Predictive Power: Lead-Lag Cross-Correlation")
+st.markdown("""
+Does retail sentiment **predict** stock returns, or merely **react** to them? 
+By shifting the sentiment data backwards and forwards in time, this cross-correlation chart reveals whether social media hype is a leading indicator (predictive) or a lagging indicator (reactive).
+""")
+
+lags = range(-5, 6)
+corr_values = []
+
+for lag in lags:
+    shifted_sent = stock_df[sent_col].shift(-lag) 
+    corr = stock_df["return"].corr(shifted_sent)
+    corr_values.append(corr)
+
+lag_df = pd.DataFrame({"Lag (Days)": lags, "Correlation": corr_values})
+lag_df["Indicator Type"] = ["Leading (Sentiment Predicts)" if x < 0 else "Same Day" if x == 0 else "Lagging (Market Drives Sentiment)" for x in lag_df["Lag (Days)"]]
+
+fig_lag = px.bar(
+    lag_df, 
+    x="Lag (Days)", 
+    y="Correlation", 
+    color="Indicator Type",
+    color_discrete_map={
+        "Leading (Sentiment Predicts)": "#2ecc71",
+        "Same Day": "#95a5a6", 
+        "Lagging (Market Drives Sentiment)": "#e74c3c" 
+    },
+    title=f"{ticker}: Lead-Lag Correlation (Sentiment vs Daily Return)"
+)
+
+fig_lag.update_layout(
+    xaxis_title="Lag in Days (Negative = Sentiment Leads Price)",
+    yaxis_title="Correlation Coefficient",
+    height=450
+)
+st.plotly_chart(fig_lag, use_container_width=True)
+
+st.caption("**How to read this:** If the green bars (negative days) are significantly higher, it suggests sentiment acts as a leading indicator. If the red bars (positive days) are higher, retail investors are largely reacting to past price movements.")
