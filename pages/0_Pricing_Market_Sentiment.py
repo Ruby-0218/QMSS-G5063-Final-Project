@@ -38,7 +38,6 @@ st.markdown("""
         font-weight: 700;
         margin-top: 2.2rem;
         padding-top: 0.6rem;
-        border-top: 1px solid rgba(128, 128, 128, 0.22);
     }
 
     h3 {
@@ -48,7 +47,6 @@ st.markdown("""
         line-height: 1.25 !important;
         background-color: var(--secondary-background-color);
         border-left: 6px solid #7C3AED;
-        border-bottom: 1px solid rgba(128, 128, 128, 0.22);
         padding: 0.9rem 1.1rem !important;
         border-radius: 12px;
         margin-top: 2.4rem !important;
@@ -69,7 +67,6 @@ st.markdown("""
         line-height: 1.25;
         background-color: var(--secondary-background-color);
         border-left: 6px solid #7C3AED;
-        border-bottom: 1px solid rgba(128, 128, 128, 0.22);
         padding: 0.9rem 1.1rem;
         border-radius: 12px;
         margin-top: 2.4rem;
