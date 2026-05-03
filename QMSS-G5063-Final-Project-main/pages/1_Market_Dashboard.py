@@ -18,6 +18,10 @@ st.markdown("""
         display: none;
     }
 
+    [data-testid="stSidebar"] hr {
+        display: none !important;
+    }
+    
     .block-container {
         padding-top: 3rem;
         padding-bottom: 5rem;
