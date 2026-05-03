@@ -47,13 +47,13 @@ st.markdown("""
         font-size: 1.75rem !important;
         line-height: 1.25 !important;
         background-color: var(--secondary-background-color);
-        border-left: 6px solid #2C7BE5;
+        border-left: 6px solid #7C3AED;
         border-bottom: 1px solid rgba(128, 128, 128, 0.22);
         padding: 0.9rem 1.1rem !important;
         border-radius: 12px;
         margin-top: 2.4rem !important;
         margin-bottom: 1rem !important;
-        box-shadow: 0 3px 10px rgba(31, 45, 61, 0.08);
+        box-shadow: 0 3px 10px rgba(124, 58, 237, 0.12);
     }
 
     p, li {
@@ -62,13 +62,19 @@ st.markdown("""
         color: var(--text-color);
     }
 
-    .hero-card {
+    .visual-header {
+        color: var(--text-color);
+        font-weight: 750;
+        font-size: 1.75rem;
+        line-height: 1.25;
         background-color: var(--secondary-background-color);
-        border: 1px solid rgba(128, 128, 128, 0.22);
-        border-radius: 18px;
-        padding: 1.6rem 1.8rem;
-        margin-bottom: 1.5rem;
-        box-shadow: 0 4px 14px rgba(31, 45, 61, 0.08);
+        border-left: 6px solid #7C3AED;
+        border-bottom: 1px solid rgba(128, 128, 128, 0.22);
+        padding: 0.9rem 1.1rem;
+        border-radius: 12px;
+        margin-top: 2.4rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 3px 10px rgba(124, 58, 237, 0.12);
     }
 
     .guide-box {
