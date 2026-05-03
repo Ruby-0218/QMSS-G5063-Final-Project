@@ -8,29 +8,104 @@ st.set_page_config(page_title="Market Dashboard", layout="wide")
 
 st.markdown("""
 <style>
+    #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
-    
+
+    [data-testid="stSidebar"] {
+        background-color: #F4F6F8;
+    }
+
     [data-testid="stSidebarNav"] ul li:first-child {
         display: none;
     }
 
     .block-container {
-        padding-top: 3.5rem;
-        padding-bottom: 6rem;
+        padding-top: 3rem;
+        padding-bottom: 5rem;
         padding-left: 5rem;
         padding-right: 5rem;
+        max-width: 1280px;
     }
-    
-    .stPlotlyChart {margin-bottom: 2rem;}
+
+    h1 {
+        color: #1F2D3D;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+    }
+
+    h2, h3 {
+        color: #25364A;
+        font-weight: 650;
+    }
+
+    p, li {
+        font-size: 1.02rem;
+        line-height: 1.65;
+        color: #2F3A45;
+    }
+
+    .hero-card {
+        background: linear-gradient(135deg, #F7FAFC 0%, #EEF4F8 100%);
+        border: 1px solid #E1E8ED;
+        border-radius: 18px;
+        padding: 1.6rem 1.8rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 14px rgba(31, 45, 61, 0.06);
+    }
+
+    .section-card {
+        background-color: #FFFFFF;
+        border: 1px solid #E6ECF1;
+        border-radius: 16px;
+        padding: 1.25rem 1.5rem;
+        margin-top: 1rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 3px 12px rgba(31, 45, 61, 0.045);
+    }
+
+    .guide-box {
+        background-color: #F8FAFC;
+        border-left: 5px solid #2C7BE5;
+        padding: 1rem 1.2rem;
+        border-radius: 10px;
+        margin-top: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .key-box {
+        background-color: #FFFDF7;
+        border-left: 5px solid #F5A623;
+        padding: 0.9rem 1.1rem;
+        border-radius: 10px;
+        margin-top: 0.75rem;
+        margin-bottom: 1.5rem;
+    }
+
+    div[data-testid="stMetric"] {
+        background-color: #FFFFFF;
+        border: 1px solid #E6ECF1;
+        padding: 1rem;
+        border-radius: 14px;
+        box-shadow: 0 3px 10px rgba(31, 45, 61, 0.05);
+    }
+
+    .stPlotlyChart {
+        margin-top: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
 </style>
 """, unsafe_allow_html=True)
 
 st.title("Market Dashboard: Does Retail Hype Move Markets?")
 st.markdown("""
 This page starts with the market story. It places stock prices, sentiment, returns, volatility, and discussion volume side by side so users can see whether online attention rises during unstable market moments.
-
-**How to use this page:** Choose a ticker and date range in the sidebar. Hover over each chart to compare exact dates, prices, sentiment values, and volatility measures.
 """)
+
+st.markdown("""
+<div class="guide-box">
+<strong>How to use this page:</strong> Choose a ticker and date range in the sidebar. Hover over each chart to compare exact dates, prices, sentiment values, and volatility measures.
+</div>
+""", unsafe_allow_html=True)
 
 prices = load_prices()
 sentiment = load_sentiment()
@@ -66,9 +141,13 @@ current_color = TICKER_COLORS.get(ticker, "#1f77b4")
 st.subheader("Price and Sentiment Over Time")
 st.markdown("""
 This chart asks whether the market price and the crowd's mood moved in the same periods. The price line shows the market outcome, while the sentiment line shows the daily tone of WallStreetBets discussion.
-
-**How to use it:** Hover over the line chart to compare close price and sentiment on the same date.
 """)
+
+st.markdown("""
+<div class="guide-box">
+<strong>How to use it:</strong> Hover over the line chart to compare close price and sentiment on the same date.
+</div>
+""", unsafe_allow_html=True)
 
 fig = go.Figure()
 fig.add_trace(go.Scatter(x=stock_df["date"], y=stock_df["close"], mode="lines", name="Close Price", line=dict(color=current_color, width=3)))
@@ -81,25 +160,49 @@ fig.update_layout(
     hovermode="x unified",
     height=520
 )
+fig.update_layout(
+    template="plotly_white",
+    font=dict(family="Arial", size=14, color="#2F3A45"),
+    title_font=dict(size=18, color="#1F2D3D"),
+    paper_bgcolor="white",
+    plot_bgcolor="white",
+    margin=dict(l=40, r=40, t=70, b=40)
+)
 st.plotly_chart(fig, use_container_width=True)
 st.markdown("""
-**Key Takeaway:** Sentiment does not need to match prices every day to be useful. The more important pattern is whether sentiment spikes appear near periods of stronger returns or higher volatility.
-""")
+<div class="key-box">
+<strong>Key Takeaway:</strong> Sentiment does not need to match prices every day to be useful. The more important pattern is whether sentiment spikes appear near periods of stronger returns or higher volatility.
+</div>
+""", unsafe_allow_html=True)
 
 st.subheader("Rolling Correlation: Is the Relationship Stable?")
 st.markdown("""
 This chart shows whether sentiment and daily returns move together consistently or only during certain periods. A relationship that appears only in short bursts may suggest event-driven retail attention rather than a stable market rule.
-
-**How to use it:** Look for periods above or below the zero line. Positive values mean sentiment and returns moved together; negative values mean they moved in opposite directions.
 """)
+
+st.markdown("""
+<div class="guide-box">
+<strong>How to use it:</strong> Look for periods above or below the zero line. Positive values mean sentiment and returns moved together; negative values mean they moved in opposite directions.
+</div>
+""", unsafe_allow_html=True)
 
 corr_df = rolling_corr(df, ticker, window=14)
 fig_corr = px.line(corr_df, x="date", y="rolling_corr", title=f"{ticker}: 14-Day Rolling Correlation Between Sentiment and Return", color_discrete_sequence=[current_color])
 fig_corr.add_hline(y=0, line_dash="dot", line_color="gray")
+fig.update_layout(
+    template="plotly_white",
+    font=dict(family="Arial", size=14, color="#2F3A45"),
+    title_font=dict(size=18, color="#1F2D3D"),
+    paper_bgcolor="white",
+    plot_bgcolor="white",
+    margin=dict(l=40, r=40, t=70, b=40)
+)
 st.plotly_chart(fig_corr, use_container_width=True)
 st.markdown("""
-**Key Takeaway:** Reddit sentiment is episodic. Quiet periods can push the correlation toward zero, while major discussion moments can temporarily make the relationship look much stronger.
-""")
+<div class="key-box">
+<strong>Key Takeaway:</strong> Reddit sentiment is episodic. Quiet periods can push the correlation toward zero, while major discussion moments can temporarily make the relationship look much stronger.
+</div>
+""", unsafe_allow_html=True)
 
 st.subheader("Sector Comparison: High-Growth vs. Value")
 st.markdown("""
@@ -114,17 +217,30 @@ group_summary = df.groupby(group_col).agg(
 ).reset_index()
 
 fig_bar = px.bar(group_summary, x=group_col, y=["avg_sentiment", "avg_volatility"], barmode="group", title="Average Sentiment and Volatility by Stock Sector")
+fig.update_layout(
+    template="plotly_white",
+    font=dict(family="Arial", size=14, color="#2F3A45"),
+    title_font=dict(size=18, color="#1F2D3D"),
+    paper_bgcolor="white",
+    plot_bgcolor="white",
+    margin=dict(l=40, r=40, t=70, b=40)
+)
 st.plotly_chart(fig_bar, use_container_width=True)
 st.markdown("""
-**Key Takeaway:** This chart is meant for relative comparison. The key question is whether the high-growth group shows a stronger sentiment-to-volatility pattern than the value-stock control group.
-""")
+<div class="key-box">
+<strong>Key Takeaway:</strong> This chart is meant for relative comparison. The key question is whether the high-growth group shows a stronger sentiment-to-volatility pattern than the value-stock control group.
+</div>
+""", unsafe_allow_html=True)
 
 st.subheader("Discussion Volume vs. Price Volatility")
 st.markdown("""
 Sometimes the amount of discussion matters more than whether the average tone is positive or negative. This scatter plot tests whether days with heavier WallStreetBets attention also tend to show higher short-term volatility.
 
-**How to use it:** Hover over each point to see the ticker, date, and price. Points farther to the right represent higher discussion volume.
-""")
+st.markdown("""
+<div class="guide-box">
+<strong>How to use this page:</strong> Choose a ticker and date range in the sidebar. Hover over each chart to compare exact dates, prices, sentiment values, and volatility measures.
+</div>
+""", unsafe_allow_html=True)
 
 fig_scatter = px.scatter(
     df[df["volatility_7d"].notna() & df["volume_7d"].notna()],
@@ -137,17 +253,30 @@ fig_scatter = px.scatter(
     title="Discussion Volume vs. Price Volatility"
 )
 fig_scatter.update_layout(xaxis_title="7-Day Average Message Volume", yaxis_title="7-Day Price Volatility", yaxis_tickformat=".1%", height=500)
+fig.update_layout(
+    template="plotly_white",
+    font=dict(family="Arial", size=14, color="#2F3A45"),
+    title_font=dict(size=18, color="#1F2D3D"),
+    paper_bgcolor="white",
+    plot_bgcolor="white",
+    margin=dict(l=40, r=40, t=70, b=40)
+)
 st.plotly_chart(fig_scatter, use_container_width=True)
 st.markdown("""
-**Key Takeaway:** Extreme emotion can matter, but attention itself is also important. High message volume can signal moments when a stock becomes part of a broader market conversation.
-""")
+<div class="key-box">
+<strong>Key Takeaway:</strong> Extreme emotion can matter, but attention itself is also important. High message volume can signal moments when a stock becomes part of a broader market conversation.
+</div>
+""", unsafe_allow_html=True)
 
 st.subheader("Lead-Lag Cross-Correlation")
 st.markdown("""
 This chart asks a timing question: does sentiment appear before price movement, or does it mostly react after the market has already moved? The chart shifts sentiment backward and forward to compare it with daily returns.
 
-**How to use it:** Negative lag values mean sentiment leads returns. Positive lag values mean sentiment follows returns.
-""")
+st.markdown("""
+<div class="guide-box">
+<strong>How to use this page:</strong> Choose a ticker and date range in the sidebar. Hover over each chart to compare exact dates, prices, sentiment values, and volatility measures.
+</div>
+""", unsafe_allow_html=True)
 
 lags = range(-5, 6)
 corr_values = []
@@ -168,7 +297,17 @@ fig_lag = px.bar(
     title=f"{ticker}: Lead-Lag Correlation (Sentiment vs Daily Return)"
 )
 fig_lag.update_layout(xaxis_title="Lag in Days (Negative = Sentiment Leads Price)", yaxis_title="Correlation Coefficient", height=450)
+fig.update_layout(
+    template="plotly_white",
+    font=dict(family="Arial", size=14, color="#2F3A45"),
+    title_font=dict(size=18, color="#1F2D3D"),
+    paper_bgcolor="white",
+    plot_bgcolor="white",
+    margin=dict(l=40, r=40, t=70, b=40)
+)
 st.plotly_chart(fig_lag, use_container_width=True)
 st.markdown("""
-**Key Takeaway:** If negative-lag bars are stronger, sentiment may be acting as an early signal. If positive-lag bars are stronger, retail discussion is more likely reacting to market movement that already happened.
-""")
+<div class="key-box">
+<strong>Key Takeaway:</strong> If negative-lag bars are stronger, sentiment may be acting as an early signal. If positive-lag bars are stronger, retail discussion is more likely reacting to market movement that already happened.
+</div>
+""", unsafe_allow_html=True)
