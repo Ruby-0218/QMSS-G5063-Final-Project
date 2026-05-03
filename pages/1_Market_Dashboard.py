@@ -44,25 +44,6 @@ st.markdown("""
         color: #2F3A45;
     }
 
-    .hero-card {
-        background: linear-gradient(135deg, #F7FAFC 0%, #EEF4F8 100%);
-        border: 1px solid #E1E8ED;
-        border-radius: 18px;
-        padding: 1.6rem 1.8rem;
-        margin-bottom: 1.5rem;
-        box-shadow: 0 4px 14px rgba(31, 45, 61, 0.06);
-    }
-
-    .section-card {
-        background-color: #FFFFFF;
-        border: 1px solid #E6ECF1;
-        border-radius: 16px;
-        padding: 1.25rem 1.5rem;
-        margin-top: 1rem;
-        margin-bottom: 1.5rem;
-        box-shadow: 0 3px 12px rgba(31, 45, 61, 0.045);
-    }
-
     .guide-box {
         background-color: #F8FAFC;
         border-left: 5px solid #2C7BE5;
@@ -95,6 +76,19 @@ st.markdown("""
     }
 </style>
 """, unsafe_allow_html=True)
+
+
+def apply_chart_style(fig):
+    fig.update_layout(
+        template="plotly_white",
+        font=dict(family="Arial", size=14, color="#2F3A45"),
+        title_font=dict(size=18, color="#1F2D3D"),
+        paper_bgcolor="white",
+        plot_bgcolor="white",
+        margin=dict(l=40, r=40, t=70, b=40)
+    )
+    return fig
+
 
 st.title("Market Dashboard: Does Retail Hype Move Markets?")
 st.markdown("""
@@ -160,14 +154,7 @@ fig.update_layout(
     hovermode="x unified",
     height=520
 )
-fig.update_layout(
-    template="plotly_white",
-    font=dict(family="Arial", size=14, color="#2F3A45"),
-    title_font=dict(size=18, color="#1F2D3D"),
-    paper_bgcolor="white",
-    plot_bgcolor="white",
-    margin=dict(l=40, r=40, t=70, b=40)
-)
+apply_chart_style(fig)
 st.plotly_chart(fig, use_container_width=True)
 st.markdown("""
 <div class="key-box">
@@ -189,14 +176,7 @@ st.markdown("""
 corr_df = rolling_corr(df, ticker, window=14)
 fig_corr = px.line(corr_df, x="date", y="rolling_corr", title=f"{ticker}: 14-Day Rolling Correlation Between Sentiment and Return", color_discrete_sequence=[current_color])
 fig_corr.add_hline(y=0, line_dash="dot", line_color="gray")
-fig.update_layout(
-    template="plotly_white",
-    font=dict(family="Arial", size=14, color="#2F3A45"),
-    title_font=dict(size=18, color="#1F2D3D"),
-    paper_bgcolor="white",
-    plot_bgcolor="white",
-    margin=dict(l=40, r=40, t=70, b=40)
-)
+apply_chart_style(fig_corr)
 st.plotly_chart(fig_corr, use_container_width=True)
 st.markdown("""
 <div class="key-box">
@@ -217,14 +197,7 @@ group_summary = df.groupby(group_col).agg(
 ).reset_index()
 
 fig_bar = px.bar(group_summary, x=group_col, y=["avg_sentiment", "avg_volatility"], barmode="group", title="Average Sentiment and Volatility by Stock Sector")
-fig.update_layout(
-    template="plotly_white",
-    font=dict(family="Arial", size=14, color="#2F3A45"),
-    title_font=dict(size=18, color="#1F2D3D"),
-    paper_bgcolor="white",
-    plot_bgcolor="white",
-    margin=dict(l=40, r=40, t=70, b=40)
-)
+apply_chart_style(fig_bar)
 st.plotly_chart(fig_bar, use_container_width=True)
 st.markdown("""
 <div class="key-box">
@@ -254,14 +227,7 @@ fig_scatter = px.scatter(
     title="Discussion Volume vs. Price Volatility"
 )
 fig_scatter.update_layout(xaxis_title="7-Day Average Message Volume", yaxis_title="7-Day Price Volatility", yaxis_tickformat=".1%", height=500)
-fig.update_layout(
-    template="plotly_white",
-    font=dict(family="Arial", size=14, color="#2F3A45"),
-    title_font=dict(size=18, color="#1F2D3D"),
-    paper_bgcolor="white",
-    plot_bgcolor="white",
-    margin=dict(l=40, r=40, t=70, b=40)
-)
+apply_chart_style(fig_scatter)
 st.plotly_chart(fig_scatter, use_container_width=True)
 st.markdown("""
 <div class="key-box">
@@ -272,10 +238,11 @@ st.markdown("""
 st.subheader("Lead-Lag Cross-Correlation")
 st.markdown("""
 This chart asks a timing question: does sentiment appear before price movement, or does it mostly react after the market has already moved? The chart shifts sentiment backward and forward to compare it with daily returns.
+""")
 
 st.markdown("""
 <div class="guide-box">
-<strong>How to use this page:</strong> Choose a ticker and date range in the sidebar. Hover over each chart to compare exact dates, prices, sentiment values, and volatility measures.
+<strong>How to use it:</strong> Negative lag values mean sentiment leads returns. Positive lag values mean sentiment follows returns.
 </div>
 """, unsafe_allow_html=True)
 
@@ -298,14 +265,7 @@ fig_lag = px.bar(
     title=f"{ticker}: Lead-Lag Correlation (Sentiment vs Daily Return)"
 )
 fig_lag.update_layout(xaxis_title="Lag in Days (Negative = Sentiment Leads Price)", yaxis_title="Correlation Coefficient", height=450)
-fig.update_layout(
-    template="plotly_white",
-    font=dict(family="Arial", size=14, color="#2F3A45"),
-    title_font=dict(size=18, color="#1F2D3D"),
-    paper_bgcolor="white",
-    plot_bgcolor="white",
-    margin=dict(l=40, r=40, t=70, b=40)
-)
+apply_chart_style(fig_lag)
 st.plotly_chart(fig_lag, use_container_width=True)
 st.markdown("""
 <div class="key-box">
