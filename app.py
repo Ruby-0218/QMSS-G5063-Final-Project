@@ -2,13 +2,14 @@ import streamlit as st
 
 st.set_page_config(page_title="Pricing Market Sentiment", layout="wide")
 
-st.title("Pricing Market Sentiment")
+# Hide sidebar label (hack)
 st.markdown("""
-This project explores how retail investor sentiment relates to stock volatility.
+<style>
+[data-testid="stSidebarNav"] ul li:first-child {
+    display: none;
+}
+</style>
+""", unsafe_allow_html=True)
 
-Use the sidebar to navigate through the analysis:
-- Market behavior
-- Text sentiment
-- Narrative networks
-- Event-driven shocks
-""")
+st.title("Pricing Market Sentiment")
+st.write("Loading...")
