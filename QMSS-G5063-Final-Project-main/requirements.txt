@@ -1,0 +1,11 @@
+streamlit
+pandas
+numpy
+plotly
+matplotlib
+wordcloud
+networkx
+pyvis
+yfinance
+requests
+scikit-learn
