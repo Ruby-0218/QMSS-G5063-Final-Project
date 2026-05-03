@@ -7,28 +7,126 @@ st.set_page_config(page_title="Event Shock Explorer", layout="wide")
 st.markdown("""
 <style>
     footer {visibility: hidden;}
-    
+
+    [data-testid="stSidebar"] {
+        background-color: var(--secondary-background-color);
+    }
+
     [data-testid="stSidebarNav"] ul li:first-child {
         display: none;
     }
 
     .block-container {
-        padding-top: 3.5rem;
-        padding-bottom: 6rem;
+        padding-top: 3rem;
+        padding-bottom: 5rem;
         padding-left: 5rem;
         padding-right: 5rem;
+        max-width: 1280px;
     }
 
-    .stPlotlyChart {margin-bottom: 2rem;}
+    h1 {
+        color: var(--text-color);
+        font-weight: 750;
+        letter-spacing: -0.025em;
+        margin-bottom: 0.6rem;
+    }
+
+    h2 {
+        color: var(--text-color);
+        font-weight: 700;
+        margin-top: 2.2rem;
+        padding-top: 0.6rem;
+        border-top: 1px solid rgba(128, 128, 128, 0.22);
+    }
+
+    h3 {
+        color: var(--text-color) !important;
+        font-weight: 750 !important;
+        font-size: 1.75rem !important;
+        line-height: 1.25 !important;
+        background-color: var(--secondary-background-color);
+        border-left: 6px solid #2C7BE5;
+        border-bottom: 1px solid rgba(128, 128, 128, 0.22);
+        padding: 0.9rem 1.1rem !important;
+        border-radius: 12px;
+        margin-top: 2.4rem !important;
+        margin-bottom: 1rem !important;
+        box-shadow: 0 3px 10px rgba(31, 45, 61, 0.08);
+    }
+
+    p, li {
+        font-size: 1.02rem;
+        line-height: 1.65;
+        color: var(--text-color);
+    }
+
+    .hero-card {
+        background-color: var(--secondary-background-color);
+        border: 1px solid rgba(128, 128, 128, 0.22);
+        border-radius: 18px;
+        padding: 1.6rem 1.8rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 14px rgba(31, 45, 61, 0.08);
+    }
+
+    .guide-box {
+        background-color: var(--secondary-background-color);
+        border-left: 5px solid #2C7BE5;
+        padding: 1rem 1.2rem;
+        border-radius: 10px;
+        margin-top: 1rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 2px 8px rgba(44, 123, 229, 0.08);
+        color: var(--text-color);
+    }
+
+    .key-box {
+        background-color: var(--secondary-background-color);
+        border-left: 5px solid #F5A623;
+        padding: 0.9rem 1.1rem;
+        border-radius: 10px;
+        margin-top: 0.75rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 2px 8px rgba(245, 166, 35, 0.08);
+        color: var(--text-color);
+    }
+
+    div[data-testid="stMetric"] {
+        background-color: var(--secondary-background-color);
+        border: 1px solid rgba(128, 128, 128, 0.22);
+        padding: 1rem;
+        border-radius: 14px;
+        box-shadow: 0 3px 10px rgba(31, 45, 61, 0.08);
+    }
+
+    .stPlotlyChart {
+        margin-top: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
 </style>
 """, unsafe_allow_html=True)
+
+def apply_plot_style(fig):
+    fig.update_layout(
+        template="plotly_white",
+        font=dict(family="Arial", size=14, color="#2F3A45"),
+        title_font=dict(size=18, color="#1F2D3D"),
+        paper_bgcolor="white",
+        plot_bgcolor="white",
+        margin=dict(l=40, r=40, t=70, b=40),
+    )
+    return fig
+
 
 st.title("Event Shock Explorer: When Sentiment Meets Market Events")
 st.markdown("""
 This page zooms in on specific market events. Instead of looking at the full timeline, it asks what happened shortly before and after a shock date.
-
-**How to use this page:** Select an event, then adjust the window size to compare more or fewer days around that event. The vertical red line marks the event date.
 """)
+st.markdown("""
+<div class="guide-box">
+<strong>How to use this page:</strong> Select an event, then adjust the window size to compare more or fewer days around that event. The vertical red line marks the event date.
+</div>
+""", unsafe_allow_html=True)
 
 prices = load_prices()
 sentiment = load_sentiment()
@@ -72,34 +170,34 @@ sent_after = after_event["sentiment_score"].mean()
 col3.metric("Post-Event Sentiment", f"{sent_after:.3f}", delta=f"{sent_after - sent_before:.3f}")
 
 st.markdown("""
-**Key Takeaway:** The metrics help users quickly see whether the post-event period looked different from the pre-event period. A strong shift does not prove causality, but it flags moments worth closer inspection.
-""")
+<div class="key-box">
+<strong>Key Takeaway:</strong> The metrics help users quickly see whether the post-event period looked different from the pre-event period. A strong shift does not prove causality, but it flags moments worth closer inspection.
+</div>
+""", unsafe_allow_html=True)
 
 st.subheader("Event Window: Price and Sentiment Around the Shock")
 st.markdown("""
 This chart places price and sentiment on the same event window. The goal is to see whether sentiment rose before, during, or after the market movement.
-
-**How to use it:** Hover over the chart to compare daily close price and sentiment. Change the window slider to test whether the pattern is short-term or broader.
 """)
+st.markdown("""
+<div class="guide-box">
+<strong>How to use it:</strong> Hover over the chart to compare daily close price and sentiment. Change the window slider to test whether the pattern is short-term or broader.
+</div>
+""", unsafe_allow_html=True)
 
 fig = go.Figure()
 fig.add_trace(go.Scatter(x=tmp["date"], y=tmp["close"], mode="lines+markers", name="Close Price", line=dict(color=current_color, width=3)))
 fig.add_trace(go.Scatter(x=tmp["date"], y=tmp["sentiment_score"], mode="lines", name="Sentiment Score", yaxis="y2", line=dict(color="rgba(150, 150, 150, 0.5)", dash="dot")))
 fig.add_shape(type="line", x0=event_date, x1=event_date, y0=0, y1=1, xref="x", yref="paper", line=dict(color="Red", width=2, dash="dashdot"))
 fig.add_annotation(x=event_date, y=1, xref="x", yref="paper", text="EVENT DATE", showarrow=True, arrowhead=2, bgcolor="red", font=dict(color="white"))
-fig.update_layout(
-    title=f"Impact Visualizer: {ticker} Price & Sentiment Around {event_name}",
-    xaxis_title="Date",
-    yaxis=dict(title="Close Price (USD)", gridcolor="rgba(200,200,200,0.2)"),
-    yaxis2=dict(title="Sentiment Score", overlaying="y", side="right", range=[-1, 1]),
-    hovermode="x unified",
-    template="plotly_white",
-    height=500
-)
+fig.update_layout(title=f"Impact Visualizer: {ticker} Price & Sentiment Around {event_name}", xaxis_title="Date", yaxis=dict(title="Close Price (USD)", gridcolor="rgba(200,200,200,0.2)"), yaxis2=dict(title="Sentiment Score", overlaying="y", side="right", range=[-1, 1]), hovermode="x unified", height=500)
+fig = apply_plot_style(fig)
 st.plotly_chart(fig, use_container_width=True)
 st.markdown("""
-**Key Takeaway:** If sentiment rises before the price movement, it may suggest early retail attention. If it rises after, it may suggest that online discussion reacted to market news rather than predicted it.
-""")
+<div class="key-box">
+<strong>Key Takeaway:</strong> If sentiment rises before the price movement, it may suggest early retail attention. If it rises after, it may suggest that online discussion reacted to market news rather than predicted it.
+</div>
+""", unsafe_allow_html=True)
 
 st.subheader("Event Window Data Table")
 st.markdown("""
@@ -107,5 +205,7 @@ The table shows the exact values used in the event window chart. It helps users 
 """)
 st.dataframe(tmp[["date", "ticker", "close", "return", "volatility_7d", "sentiment_score", "message_volume"]].sort_values("date"), use_container_width=True, hide_index=True)
 st.markdown("""
-**Key Takeaway:** The table supports transparency. Users can verify whether the visual pattern is driven by sentiment, return, volatility, or message volume.
-""")
+<div class="key-box">
+<strong>Key Takeaway:</strong> The table supports transparency. Users can verify whether the visual pattern is driven by sentiment, return, volatility, or message volume.
+</div>
+""", unsafe_allow_html=True)
