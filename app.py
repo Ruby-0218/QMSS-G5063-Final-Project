@@ -6,62 +6,103 @@ st.set_page_config(
     layout="wide"
 )
 
+st.markdown("""
+<style>
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    .block-container {
+        padding-top: 3.5rem;
+        padding-bottom: 6rem;
+        padding-left: 5rem;
+        padding-right: 5rem;
+    }
+</style>
+""", unsafe_allow_html=True)
+
 st.title("Pricing Market Sentiment")
-st.subheader("How Retail Sentiment (WallStreetBets) Relates to Stock Volatility")
+st.subheader("How WallStreetBets sentiment connects to stock volatility")
 
 st.markdown("""
-This interactive dashboard investigates whether high-growth technology stocks are more sensitive to retail sentiment than traditional value stocks. The project analyzes retail-oriented market sentiment, stock returns, volatility, and topic co-occurrence patterns across selected tickers based on historical **Reddit (WallStreetBets)** discussions.
-""")
+Markets are not only shaped by earnings reports, interest rates, or company fundamentals. During the meme-stock era, online communities also became part of the market story. This website follows that story by asking whether the language of retail investors on **Reddit's r/wallstreetbets** moved together with stock prices, returns, and volatility.
 
-st.info("""
-Data source strategy: Due to Reddit API limitations, this project utilizes a comprehensive historical Kaggle dataset of Reddit's r/wallstreetbets. This ensures stable data access while perfectly maintaining the core focus on retail investor behavior.
+The main research question is simple: **Do speculative, high-growth technology stocks react more strongly to retail sentiment shocks than traditional value stocks?** To explore this, the project compares five high-growth technology stocks with two traditional value stocks and turns social media text into interactive visual evidence.
 """)
 
 col1, col2, col3 = st.columns(3)
-
 with col1:
-    st.metric("Experimental group", "5 tech stocks", "NVDA, TSLA, AAPL, MSFT, AMZN")
-
+    st.metric("High-growth tech group", "5 stocks", "NVDA, TSLA, AAPL, MSFT, AMZN")
 with col2:
-    st.metric("Control group", "2 value stocks", "JPM, XOM")
-
+    st.metric("Traditional value group", "2 stocks", "JPM, XOM")
 with col3:
-    st.metric("Specialized visuals", "2 included", "Text + Network")
+    st.metric("Specialized visualizations", "2 types", "Text + Network")
 
-
-
-st.header("Research Question")
+st.header("What this website is for")
 st.markdown("""
-**Do speculative and high-growth technology stocks respond more strongly to sentiment shocks than traditional value stocks?**
+This website is designed as a guided path rather than a collection of separate charts. It begins with the market-level relationship between prices and sentiment, then moves into the language behind that sentiment, the keyword networks connecting stocks, and finally specific event windows where sentiment and volatility changed around market shocks.
 
-The site is organized around four steps:
-
-1. Compare stock price, return, volatility, and sentiment over time.
-2. Analyze sentiment polarity and major discussion topics.
-3. Map ticker-keyword relationships through a co-occurrence network.
-4. Explore shock events where sentiment and volatility move together.
+The goal is not to claim that Reddit sentiment directly causes stock prices to move. The goal is to help users see when sentiment, attention, and volatility appear to move together, and whether those patterns look stronger for narrative-driven technology stocks than for more traditional value stocks.
 """)
 
-st.header("Why the Reddit API issue does not weaken the project")
+st.header("Data used in this project")
 st.markdown("""
-Reddit was only one possible source for retail sentiment. The project requirement asks for a larger dataset, interactive website, and at least two specialized visualization types. 
-StockTwits is actually more directly connected to investor behavior because users discuss tickers explicitly. Alpha Vantage's News & Sentiment API is also useful as a professional-news benchmark.
+The project uses three main data components:
+
+1. **Reddit r/wallstreetbets dataset from Kaggle.** This provides historical retail investor posts from the 2020 to 2021 meme-stock period. We use this because it gives a stable and large sample of retail discussion without depending on live Reddit API access.
+2. **Yahoo Finance data through `yfinance`.** Daily stock prices and trading volume are matched to the Reddit timeframe so that market behavior can be compared with discussion patterns.
+3. **FinBERT sentiment scoring.** Reddit text is scored with `ProsusAI/finbert`, a financial language model that converts posts into sentiment values.
+
+This data choice keeps the project focused on retail sentiment. Even though the original proposal considered live APIs and professional news sentiment, the final website prioritizes WallStreetBets because it is closer to the core question about retail investor attention and market volatility.
 """)
 
-st.header("Website Design Logic")
+st.header("Website navigation guide")
 st.markdown("""
-Each chart includes interaction, comparison, or filtering. The dashboard avoids isolated charts and instead builds one visual argument: 
-public market sentiment may matter more for stocks that are already more speculative, narrative-driven, and heavily discussed.
+Use the sidebar to move through the project in this order:
+
+**Market Dashboard** shows how price, sentiment, return, volatility, and message volume move over time.  
+**Text Analysis** looks inside the posts to show sentiment distribution, common words, and frequent phrases.  
+**Network Map** shows how tickers connect to repeated market narratives such as AI, EV, earnings, and inflation.  
+**Event Shock Explorer** zooms into specific events and compares market behavior before and after the shock.
+
+This guide is placed near the beginning because users should understand the path before reading the deeper methods section.
 """)
 
-with st.expander("Methodology: Data Substitution & Research Impact"):
-    st.write("""
-    Due to current Reddit API limitations, this project utilizes a high-quality historical dataset of **Reddit's r/wallstreetbets** sourced from **Kaggle**. This ensures a larger, more stable sample size while maintaining the original research intent of measuring public market sentiment.
-    
-    **Why we chose this specific dataset:**
-    * **Pure Retail Investor Focus:** It captures authentic, unfiltered discussions from the WallStreetBets community, allowing us to perfectly isolate the impact of retail momentum and "meme-stock" dynamics.
-    * **Robust Sentiment Analysis:** The historical text provides a solid foundation for NLP sentiment scoring, converting unstructured social media buzz into clear, quantifiable polarities.
-    * **Targeted Ticker Coverage:** It contains dense historical data for both our experimental group (High-growth Tech: NVDA, TSLA, etc.) and control group (Value: JPM, XOM), making the comparison accurate and meaningful.
-    """)
+st.header("Methods and analytical pipeline")
+st.markdown("""
+The data pipeline is built offline so the Streamlit website can load quickly. The raw Reddit text is cleaned, matched to selected tickers, scored with FinBERT, aggregated by date and ticker, and then merged with stock price data. The same processed data also supports the text analysis, network map, and event shock explorer.
+""")
 
-st.caption("Use the sidebar pages to explore the dashboard, text analysis, network map, and event shock explorer.")
+with st.expander("View technical workflow"):
+    st.code("""
+# Quantitative Pipeline:
+# 1. Text cleaning and ticker matching from Reddit posts.
+# 2. FinBERT sentiment scoring for financial text.
+# 3. Daily aggregation of sentiment score and message volume.
+# 4. Yahoo Finance price collection for selected tickers.
+# 5. Time-series merge by date and ticker.
+# 6. Rolling return, volatility, sentiment, and volume calculations.
+# 7. Ticker-keyword network construction for narrative analysis.
+    """, language="python")
+
+st.header("Future Work & Limitations")
+st.markdown("""
+This project is strongest as an exploratory visualization tool, not as a full prediction model. The Reddit dataset captures a historically important period, but it does not represent all investors or all market conditions. Sentiment scoring can also miss sarcasm, slang, and context-specific jokes, which are common in WallStreetBets posts.
+
+Future versions could add professional news sentiment, StockTwits messages, or prediction market data from sources such as Kalshi or Polymarket. Comparing retail hype with professional news or real-money expectations could help separate noisy excitement from signals that may be more useful for forecasting volatility.
+""")
+
+st.header("Reproducibility: Download Merged Dataset")
+st.write("Download the processed dataset used by the dashboard for checking, reproduction, or further analysis.")
+
+try:
+    prices = load_prices()
+    sentiment = load_sentiment()
+    df = build_merged_data(prices, sentiment)
+    csv = df.to_csv(index=False).encode("utf-8")
+    st.download_button(
+        label="Download Processed Data (.csv)",
+        data=csv,
+        file_name="market_sentiment_merged.csv",
+        mime="text/csv",
+    )
+except Exception:
+    st.info("The download button will be active once data dependencies are loaded.")
