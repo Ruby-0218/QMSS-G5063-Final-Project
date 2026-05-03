@@ -11,5 +11,5 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.title("Pricing Market Sentiment")
-st.write("Loading...")
+st.title("Welcome")
+st.write("Please select 'Pricing Market Sentiment' from the sidebar.")
