@@ -19,6 +19,9 @@ st.markdown("""
     [data-testid="stSidebarNav"] ul li:first-child {
         display: none;
     }
+    [data-testid="stSidebar"] hr {
+        display: none !important;
+    }
 
     .block-container {
         padding-top: 3rem;
