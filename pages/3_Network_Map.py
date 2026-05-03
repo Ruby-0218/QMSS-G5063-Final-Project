@@ -48,13 +48,13 @@ st.markdown("""
         font-size: 1.75rem !important;
         line-height: 1.25 !important;
         background-color: var(--secondary-background-color);
-        border-left: 6px solid #2C7BE5;
+        border-left: 6px solid #7C3AED;
         border-bottom: 1px solid rgba(128, 128, 128, 0.22);
         padding: 0.9rem 1.1rem !important;
         border-radius: 12px;
         margin-top: 2.4rem !important;
         margin-bottom: 1rem !important;
-        box-shadow: 0 3px 10px rgba(31, 45, 61, 0.08);
+        box-shadow: 0 3px 10px rgba(124, 58, 237, 0.12);
     }
 
     p, li {
@@ -63,13 +63,19 @@ st.markdown("""
         color: var(--text-color);
     }
 
-    .hero-card {
+    .visual-header {
+        color: var(--text-color);
+        font-weight: 750;
+        font-size: 1.75rem;
+        line-height: 1.25;
         background-color: var(--secondary-background-color);
-        border: 1px solid rgba(128, 128, 128, 0.22);
-        border-radius: 18px;
-        padding: 1.6rem 1.8rem;
-        margin-bottom: 1.5rem;
-        box-shadow: 0 4px 14px rgba(31, 45, 61, 0.08);
+        border-left: 6px solid #7C3AED;
+        border-bottom: 1px solid rgba(128, 128, 128, 0.22);
+        padding: 0.9rem 1.1rem;
+        border-radius: 12px;
+        margin-top: 2.4rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 3px 10px rgba(124, 58, 237, 0.12);
     }
 
     .guide-box {
@@ -112,11 +118,28 @@ st.markdown("""
 def apply_plot_style(fig):
     fig.update_layout(
         template="plotly_white",
-        font=dict(family="Arial", size=14, color="#2F3A45"),
+        font=dict(family="Arial", size=14, color="#243447"),
         title_font=dict(size=18, color="#1F2D3D"),
-        paper_bgcolor="white",
-        plot_bgcolor="white",
-        margin=dict(l=40, r=40, t=70, b=40),
+        paper_bgcolor="#FFFFFF",
+        plot_bgcolor="#FFFFFF",
+        legend=dict(font=dict(color="#243447"), bgcolor="rgba(255,255,255,0.85)"),
+        margin=dict(l=55, r=55, t=88, b=55),
+    )
+    fig.update_xaxes(
+        showgrid=True,
+        gridcolor="#E6ECF1",
+        zerolinecolor="#9AA7B2",
+        linecolor="#9AA7B2",
+        tickfont=dict(color="#243447"),
+        title_font=dict(color="#243447"),
+    )
+    fig.update_yaxes(
+        showgrid=True,
+        gridcolor="#E6ECF1",
+        zerolinecolor="#9AA7B2",
+        linecolor="#9AA7B2",
+        tickfont=dict(color="#243447"),
+        title_font=dict(color="#243447"),
     )
     return fig
 
