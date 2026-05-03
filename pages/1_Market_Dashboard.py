@@ -8,11 +8,10 @@ st.set_page_config(page_title="Market Dashboard", layout="wide")
 
 st.markdown("""
 <style>
-    #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
 
     [data-testid="stSidebar"] {
-        background-color: #F4F6F8;
+        background-color: var(--secondary-background-color);
     }
 
     [data-testid="stSidebarNav"] ul li:first-child {
@@ -28,46 +27,78 @@ st.markdown("""
     }
 
     h1 {
-        color: #1F2D3D;
-        font-weight: 700;
-        letter-spacing: -0.02em;
+        color: var(--text-color);
+        font-weight: 750;
+        letter-spacing: -0.025em;
+        margin-bottom: 0.6rem;
     }
 
-    h2, h3 {
-        color: #25364A;
-        font-weight: 650;
+    h2 {
+        color: var(--text-color);
+        font-weight: 700;
+        margin-top: 2.2rem;
+        padding-top: 0.6rem;
+        border-top: 1px solid rgba(128, 128, 128, 0.22);
+    }
+
+    h3 {
+        color: var(--text-color) !important;
+        font-weight: 750 !important;
+        font-size: 1.75rem !important;
+        line-height: 1.25 !important;
+        background-color: var(--secondary-background-color);
+        border-left: 6px solid #2C7BE5;
+        border-bottom: 1px solid rgba(128, 128, 128, 0.22);
+        padding: 0.9rem 1.1rem !important;
+        border-radius: 12px;
+        margin-top: 2.4rem !important;
+        margin-bottom: 1rem !important;
+        box-shadow: 0 3px 10px rgba(31, 45, 61, 0.08);
     }
 
     p, li {
         font-size: 1.02rem;
         line-height: 1.65;
-        color: #2F3A45;
+        color: var(--text-color);
+    }
+
+    .hero-card {
+        background-color: var(--secondary-background-color);
+        border: 1px solid rgba(128, 128, 128, 0.22);
+        border-radius: 18px;
+        padding: 1.6rem 1.8rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 14px rgba(31, 45, 61, 0.08);
     }
 
     .guide-box {
-        background-color: #F8FAFC;
+        background-color: var(--secondary-background-color);
         border-left: 5px solid #2C7BE5;
         padding: 1rem 1.2rem;
         border-radius: 10px;
         margin-top: 1rem;
         margin-bottom: 1.5rem;
+        box-shadow: 0 2px 8px rgba(44, 123, 229, 0.08);
+        color: var(--text-color);
     }
 
     .key-box {
-        background-color: #FFFDF7;
+        background-color: var(--secondary-background-color);
         border-left: 5px solid #F5A623;
         padding: 0.9rem 1.1rem;
         border-radius: 10px;
         margin-top: 0.75rem;
         margin-bottom: 1.5rem;
+        box-shadow: 0 2px 8px rgba(245, 166, 35, 0.08);
+        color: var(--text-color);
     }
 
     div[data-testid="stMetric"] {
-        background-color: #FFFFFF;
-        border: 1px solid #E6ECF1;
+        background-color: var(--secondary-background-color);
+        border: 1px solid rgba(128, 128, 128, 0.22);
         padding: 1rem;
         border-radius: 14px;
-        box-shadow: 0 3px 10px rgba(31, 45, 61, 0.05);
+        box-shadow: 0 3px 10px rgba(31, 45, 61, 0.08);
     }
 
     .stPlotlyChart {
@@ -77,15 +108,14 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-
-def apply_chart_style(fig):
+def apply_plot_style(fig):
     fig.update_layout(
         template="plotly_white",
         font=dict(family="Arial", size=14, color="#2F3A45"),
         title_font=dict(size=18, color="#1F2D3D"),
         paper_bgcolor="white",
         plot_bgcolor="white",
-        margin=dict(l=40, r=40, t=70, b=40)
+        margin=dict(l=40, r=40, t=70, b=40),
     )
     return fig
 
@@ -146,15 +176,8 @@ st.markdown("""
 fig = go.Figure()
 fig.add_trace(go.Scatter(x=stock_df["date"], y=stock_df["close"], mode="lines", name="Close Price", line=dict(color=current_color, width=3)))
 fig.add_trace(go.Scatter(x=stock_df["date"], y=stock_df[sent_col], mode="lines", name=sentiment_source, yaxis="y2", line=dict(color="rgba(150, 150, 150, 0.6)", width=2, dash="dot")))
-fig.update_layout(
-    title=f"{ticker}: Price Action vs. {sentiment_source}",
-    xaxis_title="Date",
-    yaxis=dict(title="Close Price (USD)"),
-    yaxis2=dict(title="Sentiment Score", overlaying="y", side="right"),
-    hovermode="x unified",
-    height=520
-)
-apply_chart_style(fig)
+fig.update_layout(title=f"{ticker}: Price Action vs. {sentiment_source}", xaxis_title="Date", yaxis=dict(title="Close Price (USD)"), yaxis2=dict(title="Sentiment Score", overlaying="y", side="right"), hovermode="x unified", height=520)
+fig = apply_plot_style(fig)
 st.plotly_chart(fig, use_container_width=True)
 st.markdown("""
 <div class="key-box">
@@ -176,7 +199,7 @@ st.markdown("""
 corr_df = rolling_corr(df, ticker, window=14)
 fig_corr = px.line(corr_df, x="date", y="rolling_corr", title=f"{ticker}: 14-Day Rolling Correlation Between Sentiment and Return", color_discrete_sequence=[current_color])
 fig_corr.add_hline(y=0, line_dash="dot", line_color="gray")
-apply_chart_style(fig_corr)
+fig_corr = apply_plot_style(fig_corr)
 st.plotly_chart(fig_corr, use_container_width=True)
 st.markdown("""
 <div class="key-box">
@@ -190,14 +213,9 @@ This comparison steps back from one ticker and asks whether the project groups b
 """)
 
 group_col = "group_x" if "group_x" in df.columns else "group"
-group_summary = df.groupby(group_col).agg(
-    avg_sentiment=("sentiment_score", "mean"),
-    avg_volatility=("volatility_7d", "mean"),
-    avg_message_volume=("message_volume", "mean")
-).reset_index()
-
+group_summary = df.groupby(group_col).agg(avg_sentiment=("sentiment_score", "mean"), avg_volatility=("volatility_7d", "mean"), avg_message_volume=("message_volume", "mean")).reset_index()
 fig_bar = px.bar(group_summary, x=group_col, y=["avg_sentiment", "avg_volatility"], barmode="group", title="Average Sentiment and Volatility by Stock Sector")
-apply_chart_style(fig_bar)
+fig_bar = apply_plot_style(fig_bar)
 st.plotly_chart(fig_bar, use_container_width=True)
 st.markdown("""
 <div class="key-box">
@@ -216,18 +234,9 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-fig_scatter = px.scatter(
-    df[df["volatility_7d"].notna() & df["volume_7d"].notna()],
-    x="volume_7d",
-    y="volatility_7d",
-    color="ticker",
-    color_discrete_map=TICKER_COLORS,
-    hover_data=["date", "close"],
-    opacity=0.6,
-    title="Discussion Volume vs. Price Volatility"
-)
+fig_scatter = px.scatter(df[df["volatility_7d"].notna() & df["volume_7d"].notna()], x="volume_7d", y="volatility_7d", color="ticker", color_discrete_map=TICKER_COLORS, hover_data=["date", "close"], opacity=0.6, title="Discussion Volume vs. Price Volatility")
 fig_scatter.update_layout(xaxis_title="7-Day Average Message Volume", yaxis_title="7-Day Price Volatility", yaxis_tickformat=".1%", height=500)
-apply_chart_style(fig_scatter)
+fig_scatter = apply_plot_style(fig_scatter)
 st.plotly_chart(fig_scatter, use_container_width=True)
 st.markdown("""
 <div class="key-box">
@@ -255,17 +264,9 @@ for lag in lags:
 
 lag_df = pd.DataFrame({"Lag (Days)": lags, "Correlation": corr_values})
 lag_df["Indicator Type"] = ["Leading (Sentiment Predicts)" if x < 0 else "Same Day" if x == 0 else "Lagging (Market Drives Sentiment)" for x in lag_df["Lag (Days)"]]
-
-fig_lag = px.bar(
-    lag_df,
-    x="Lag (Days)",
-    y="Correlation",
-    color="Indicator Type",
-    color_discrete_map={"Leading (Sentiment Predicts)": "#2ecc71", "Same Day": "#95a5a6", "Lagging (Market Drives Sentiment)": "#e74c3c"},
-    title=f"{ticker}: Lead-Lag Correlation (Sentiment vs Daily Return)"
-)
+fig_lag = px.bar(lag_df, x="Lag (Days)", y="Correlation", color="Indicator Type", color_discrete_map={"Leading (Sentiment Predicts)": "#2ecc71", "Same Day": "#95a5a6", "Lagging (Market Drives Sentiment)": "#e74c3c"}, title=f"{ticker}: Lead-Lag Correlation (Sentiment vs Daily Return)")
 fig_lag.update_layout(xaxis_title="Lag in Days (Negative = Sentiment Leads Price)", yaxis_title="Correlation Coefficient", height=450)
-apply_chart_style(fig_lag)
+fig_lag = apply_plot_style(fig_lag)
 st.plotly_chart(fig_lag, use_container_width=True)
 st.markdown("""
 <div class="key-box">
