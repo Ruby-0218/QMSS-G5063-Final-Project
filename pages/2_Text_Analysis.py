@@ -10,8 +10,11 @@ from utils import load_text_posts, load_sentiment, ALL_TICKERS, sentiment_label,
 st.set_page_config(page_title="Text Analysis", layout="wide")
 st.markdown("""
 <style>
-    #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
+    
+    [data-testid="stSidebarNav"] ul li:first-child {
+        display: none;
+    }
     .block-container {
         padding-top: 3.5rem;
         padding-bottom: 6rem;
