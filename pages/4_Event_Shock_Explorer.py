@@ -45,13 +45,13 @@ st.markdown("""
         font-size: 1.75rem !important;
         line-height: 1.25 !important;
         background-color: var(--secondary-background-color);
-        border-left: 6px solid #2C7BE5;
+        border-left: 6px solid #7C3AED;
         border-bottom: 1px solid rgba(128, 128, 128, 0.22);
         padding: 0.9rem 1.1rem !important;
         border-radius: 12px;
         margin-top: 2.4rem !important;
         margin-bottom: 1rem !important;
-        box-shadow: 0 3px 10px rgba(31, 45, 61, 0.08);
+        box-shadow: 0 3px 10px rgba(124, 58, 237, 0.12);
     }
 
     p, li {
@@ -60,13 +60,19 @@ st.markdown("""
         color: var(--text-color);
     }
 
-    .hero-card {
+    .visual-header {
+        color: var(--text-color);
+        font-weight: 750;
+        font-size: 1.75rem;
+        line-height: 1.25;
         background-color: var(--secondary-background-color);
-        border: 1px solid rgba(128, 128, 128, 0.22);
-        border-radius: 18px;
-        padding: 1.6rem 1.8rem;
-        margin-bottom: 1.5rem;
-        box-shadow: 0 4px 14px rgba(31, 45, 61, 0.08);
+        border-left: 6px solid #7C3AED;
+        border-bottom: 1px solid rgba(128, 128, 128, 0.22);
+        padding: 0.9rem 1.1rem;
+        border-radius: 12px;
+        margin-top: 2.4rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 3px 10px rgba(124, 58, 237, 0.12);
     }
 
     .guide-box {
@@ -109,11 +115,28 @@ st.markdown("""
 def apply_plot_style(fig):
     fig.update_layout(
         template="plotly_white",
-        font=dict(family="Arial", size=14, color="#2F3A45"),
+        font=dict(family="Arial", size=14, color="#243447"),
         title_font=dict(size=18, color="#1F2D3D"),
-        paper_bgcolor="white",
-        plot_bgcolor="white",
-        margin=dict(l=40, r=40, t=70, b=40),
+        paper_bgcolor="#FFFFFF",
+        plot_bgcolor="#FFFFFF",
+        legend=dict(font=dict(color="#243447"), bgcolor="rgba(255,255,255,0.85)"),
+        margin=dict(l=55, r=55, t=88, b=55),
+    )
+    fig.update_xaxes(
+        showgrid=True,
+        gridcolor="#E6ECF1",
+        zerolinecolor="#9AA7B2",
+        linecolor="#9AA7B2",
+        tickfont=dict(color="#243447"),
+        title_font=dict(color="#243447"),
+    )
+    fig.update_yaxes(
+        showgrid=True,
+        gridcolor="#E6ECF1",
+        zerolinecolor="#9AA7B2",
+        linecolor="#9AA7B2",
+        tickfont=dict(color="#243447"),
+        title_font=dict(color="#243447"),
     )
     return fig
 
@@ -188,8 +211,8 @@ st.markdown("""
 fig = go.Figure()
 fig.add_trace(go.Scatter(x=tmp["date"], y=tmp["close"], mode="lines+markers", name="Close Price", line=dict(color=current_color, width=3)))
 fig.add_trace(go.Scatter(x=tmp["date"], y=tmp["sentiment_score"], mode="lines", name="Sentiment Score", yaxis="y2", line=dict(color="rgba(150, 150, 150, 0.5)", dash="dot")))
-fig.add_shape(type="line", x0=event_date, x1=event_date, y0=0, y1=1, xref="x", yref="paper", line=dict(color="Red", width=2, dash="dashdot"))
-fig.add_annotation(x=event_date, y=1, xref="x", yref="paper", text="EVENT DATE", showarrow=True, arrowhead=2, bgcolor="red", font=dict(color="white"))
+fig.add_shape(type="line", x0=event_date, x1=event_date, y0=0, y1=0.91, xref="x", yref="paper", line=dict(color="#E74C3C", width=2, dash="dashdot"))
+fig.add_annotation(x=event_date, y=0.92, xref="x", yref="paper", text="EVENT DATE", showarrow=True, arrowhead=2, ax=0, ay=-35, bgcolor="#E74C3C", bordercolor="#E74C3C", font=dict(color="white", size=12))
 fig.update_layout(title=f"Impact Visualizer: {ticker} Price & Sentiment Around {event_name}", xaxis_title="Date", yaxis=dict(title="Close Price (USD)", gridcolor="rgba(200,200,200,0.2)"), yaxis2=dict(title="Sentiment Score", overlaying="y", side="right", range=[-1, 1]), hovermode="x unified", height=500)
 fig = apply_plot_style(fig)
 st.plotly_chart(fig, use_container_width=True)
