@@ -235,10 +235,11 @@ st.markdown("""
 st.subheader("Discussion Volume vs. Price Volatility")
 st.markdown("""
 Sometimes the amount of discussion matters more than whether the average tone is positive or negative. This scatter plot tests whether days with heavier WallStreetBets attention also tend to show higher short-term volatility.
+""")
 
 st.markdown("""
 <div class="guide-box">
-<strong>How to use this page:</strong> Choose a ticker and date range in the sidebar. Hover over each chart to compare exact dates, prices, sentiment values, and volatility measures.
+<strong>How to use it:</strong> Hover over each point to see the ticker, date, and price. Points farther to the right represent higher discussion volume.
 </div>
 """, unsafe_allow_html=True)
 
