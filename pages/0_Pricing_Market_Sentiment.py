@@ -8,11 +8,10 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-    #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
 
     [data-testid="stSidebar"] {
-        background-color: #F4F6F8;
+        background-color: var(--secondary-background-color);
     }
 
     [data-testid="stSidebarNav"] ul li:first-child {
@@ -28,65 +27,78 @@ st.markdown("""
     }
 
     h1 {
-        color: #1F2D3D;
-        font-weight: 700;
-        letter-spacing: -0.02em;
+        color: var(--text-color);
+        font-weight: 750;
+        letter-spacing: -0.025em;
+        margin-bottom: 0.6rem;
     }
 
-    h2, h3 {
-        color: #25364A;
-        font-weight: 650;
+    h2 {
+        color: var(--text-color);
+        font-weight: 700;
+        margin-top: 2.2rem;
+        padding-top: 0.6rem;
+        border-top: 1px solid rgba(128, 128, 128, 0.22);
+    }
+
+    h3 {
+        color: var(--text-color) !important;
+        font-weight: 750 !important;
+        font-size: 1.75rem !important;
+        line-height: 1.25 !important;
+        background-color: var(--secondary-background-color);
+        border-left: 6px solid #2C7BE5;
+        border-bottom: 1px solid rgba(128, 128, 128, 0.22);
+        padding: 0.9rem 1.1rem !important;
+        border-radius: 12px;
+        margin-top: 2.4rem !important;
+        margin-bottom: 1rem !important;
+        box-shadow: 0 3px 10px rgba(31, 45, 61, 0.08);
     }
 
     p, li {
         font-size: 1.02rem;
         line-height: 1.65;
-        color: #2F3A45;
+        color: var(--text-color);
     }
 
     .hero-card {
-        background: linear-gradient(135deg, #F7FAFC 0%, #EEF4F8 100%);
-        border: 1px solid #E1E8ED;
+        background-color: var(--secondary-background-color);
+        border: 1px solid rgba(128, 128, 128, 0.22);
         border-radius: 18px;
         padding: 1.6rem 1.8rem;
         margin-bottom: 1.5rem;
-        box-shadow: 0 4px 14px rgba(31, 45, 61, 0.06);
-    }
-
-    .section-card {
-        background-color: #FFFFFF;
-        border: 1px solid #E6ECF1;
-        border-radius: 16px;
-        padding: 1.25rem 1.5rem;
-        margin-top: 1rem;
-        margin-bottom: 1.5rem;
-        box-shadow: 0 3px 12px rgba(31, 45, 61, 0.045);
+        box-shadow: 0 4px 14px rgba(31, 45, 61, 0.08);
     }
 
     .guide-box {
-        background-color: #F8FAFC;
+        background-color: var(--secondary-background-color);
         border-left: 5px solid #2C7BE5;
         padding: 1rem 1.2rem;
         border-radius: 10px;
         margin-top: 1rem;
         margin-bottom: 1.5rem;
+        box-shadow: 0 2px 8px rgba(44, 123, 229, 0.08);
+        color: var(--text-color);
     }
 
     .key-box {
-        background-color: #FFFDF7;
+        background-color: var(--secondary-background-color);
         border-left: 5px solid #F5A623;
         padding: 0.9rem 1.1rem;
         border-radius: 10px;
         margin-top: 0.75rem;
         margin-bottom: 1.5rem;
+        box-shadow: 0 2px 8px rgba(245, 166, 35, 0.08);
+        color: var(--text-color);
     }
 
     div[data-testid="stMetric"] {
-        background-color: #FFFFFF;
-        border: 1px solid #E6ECF1;
+        background-color: var(--secondary-background-color);
+        border: 1px solid rgba(128, 128, 128, 0.22);
         padding: 1rem;
         border-radius: 14px;
-        box-shadow: 0 3px 10px rgba(31, 45, 61, 0.05);
+        box-shadow: 0 3px 10px rgba(31, 45, 61, 0.08);
     }
 
     .stPlotlyChart {
