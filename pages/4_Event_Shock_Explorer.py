@@ -6,14 +6,19 @@ from utils import load_prices, load_sentiment, load_events, build_merged_data, T
 st.set_page_config(page_title="Event Shock Explorer", layout="wide")
 st.markdown("""
 <style>
-    #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
+    
+    [data-testid="stSidebarNav"] ul li:first-child {
+        display: none;
+    }
+
     .block-container {
         padding-top: 3.5rem;
         padding-bottom: 6rem;
         padding-left: 5rem;
         padding-right: 5rem;
     }
+
     .stPlotlyChart {margin-bottom: 2rem;}
 </style>
 """, unsafe_allow_html=True)
