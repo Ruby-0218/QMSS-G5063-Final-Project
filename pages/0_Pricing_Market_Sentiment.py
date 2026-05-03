@@ -8,25 +8,101 @@ st.set_page_config(
 
 st.markdown("""
 <style>
+    #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
-    
+
+    [data-testid="stSidebar"] {
+        background-color: #F4F6F8;
+    }
+
     [data-testid="stSidebarNav"] ul li:first-child {
         display: none;
     }
 
     .block-container {
-        padding-top: 3.5rem;
-        padding-bottom: 6rem;
+        padding-top: 3rem;
+        padding-bottom: 5rem;
         padding-left: 5rem;
         padding-right: 5rem;
+        max-width: 1280px;
     }
-    
-    .stPlotlyChart {margin-bottom: 2rem;}
+
+    h1 {
+        color: #1F2D3D;
+        font-weight: 700;
+        letter-spacing: -0.02em;
+    }
+
+    h2, h3 {
+        color: #25364A;
+        font-weight: 650;
+    }
+
+    p, li {
+        font-size: 1.02rem;
+        line-height: 1.65;
+        color: #2F3A45;
+    }
+
+    .hero-card {
+        background: linear-gradient(135deg, #F7FAFC 0%, #EEF4F8 100%);
+        border: 1px solid #E1E8ED;
+        border-radius: 18px;
+        padding: 1.6rem 1.8rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 4px 14px rgba(31, 45, 61, 0.06);
+    }
+
+    .section-card {
+        background-color: #FFFFFF;
+        border: 1px solid #E6ECF1;
+        border-radius: 16px;
+        padding: 1.25rem 1.5rem;
+        margin-top: 1rem;
+        margin-bottom: 1.5rem;
+        box-shadow: 0 3px 12px rgba(31, 45, 61, 0.045);
+    }
+
+    .guide-box {
+        background-color: #F8FAFC;
+        border-left: 5px solid #2C7BE5;
+        padding: 1rem 1.2rem;
+        border-radius: 10px;
+        margin-top: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .key-box {
+        background-color: #FFFDF7;
+        border-left: 5px solid #F5A623;
+        padding: 0.9rem 1.1rem;
+        border-radius: 10px;
+        margin-top: 0.75rem;
+        margin-bottom: 1.5rem;
+    }
+
+    div[data-testid="stMetric"] {
+        background-color: #FFFFFF;
+        border: 1px solid #E6ECF1;
+        padding: 1rem;
+        border-radius: 14px;
+        box-shadow: 0 3px 10px rgba(31, 45, 61, 0.05);
+    }
+
+    .stPlotlyChart {
+        margin-top: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
 </style>
 """, unsafe_allow_html=True)
 
+st.markdown('<div class="hero-card">', unsafe_allow_html=True)
 st.title("Pricing Market Sentiment")
 st.subheader("How WallStreetBets sentiment connects to stock volatility")
+st.markdown("""
+This project turns online market conversation into a guided visual story about sentiment, attention, and volatility.
+""")
+st.markdown('</div>', unsafe_allow_html=True)
 
 st.markdown("""
 Markets are not only shaped by earnings reports, interest rates, or company fundamentals. During the meme-stock era, online communities also became part of the market story. This website follows that story by asking whether the language of retail investors on **Reddit's r/wallstreetbets** moved together with stock prices, returns, and volatility.
