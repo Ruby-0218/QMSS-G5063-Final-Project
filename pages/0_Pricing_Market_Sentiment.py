@@ -108,13 +108,11 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown('<div class="hero-card">', unsafe_allow_html=True)
 st.title("Pricing Market Sentiment")
 st.subheader("How WallStreetBets sentiment connects to stock volatility")
 st.markdown("""
 This project turns online market conversation into a guided visual story about sentiment, attention, and volatility.
 """)
-st.markdown('</div>', unsafe_allow_html=True)
 
 st.markdown("""
 Markets are not only shaped by earnings reports, interest rates, or company fundamentals. During the meme-stock era, online communities also became part of the market story. This website follows that story by asking whether the language of retail investors on **Reddit's r/wallstreetbets** moved together with stock prices, returns, and volatility.
