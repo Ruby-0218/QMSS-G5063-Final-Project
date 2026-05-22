@@ -8,6 +8,7 @@
 This interactive dashboard investigates whether high-growth technology stocks (e.g., NVDA, TSLA) are more sensitive to retail investor sentiment than traditional value stocks (e.g., JPM, XOM). The project compares stock returns, volatility, and sentiment polarity using historical discussion data.
 
 ## Data Source & Methodology 
-Originally intended to use live Reddit API scraping, this project was adapted to use a comprehensive historical **Kaggle dataset of Reddit's r/wallstreetbets**. 
+## Data Source & Methodology 
+Originally intended to use live Reddit API scraping, this project was adapted to use a comprehensive historical **[Kaggle dataset of Reddit's r/wallstreetbets](https://www.kaggle.com/datasets/gpreda/reddit-wallstreetsbets-posts)**.
 
 This pivot not only resolves current Reddit API access limitations but also provides a more stable, higher-volume historical sample of pure retail investor behavior. By focusing entirely on this retail-driven dataset, we can cleanly observe the "meme-stock" era dynamics and how retail sentiment shocks interact differently across equity types.
